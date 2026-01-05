@@ -11,12 +11,6 @@
 *.gch
 *.pch
 
-# Linker files
-*.ilk
-
-# Debugger Files
-*.pdb
-
 # Compiled Dynamic libraries
 *.so
 *.dylib
@@ -37,5 +31,28 @@
 *.out
 *.app
 
-# debug information files
-*.dwo
+**/build
+**/xcode
+**/Release
+**/Debug
+**/.vscode
+**/.vs
+**/CPTCMakeBuild
+**/Blast4/media
+.DS_Store
+Thumbs.db
+*.oa
+*.ncb
+*.sln
+*.suo
+*.vap
+*.dbp
+*.ilk
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.cpt_backup
+*.clang-tidy
+*.csv
+src/.clang-tidy
+saved-game.txt
