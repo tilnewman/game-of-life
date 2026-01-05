@@ -9,6 +9,7 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/Window/Event.hpp>
 
 #include <optional>
 #include <vector>
@@ -33,8 +34,11 @@ namespace gameoflife
             sf::RenderTarget & t_target,
             const sf::RenderStates & t_states) const;
 
+        void handleEvent(const sf::Event & t_event);
+
       private:
         const sf::Vector2f gridPositionToScreenPosition(const GridPos_t & t_position) const;
+        const GridPos_t screenPositionToGridPosition(const sf::Vector2f & t_position) const;
 
         CellType_t getCellValue(const GridPos_t & t_position) const;
         void setCellValue(const GridPos_t & t_position, const CellType_t t_value);

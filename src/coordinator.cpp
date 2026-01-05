@@ -125,6 +125,8 @@ namespace gameoflife
                 m_isPaused = !m_isPaused;
             }
         }
+
+        m_grid.handleEvent(t_event);
     }
 
     void Coordinator::update(const float t_elapsedTimeSec)
