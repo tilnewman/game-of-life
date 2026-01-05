@@ -16,6 +16,7 @@ namespace gameoflife
         : m_config{}
         , m_renderStates{}
         , m_renderWindow{}
+        , m_grid{}
         , m_isRunning{ true }
         , m_elapsedTimeSec{ 0.0f }
         , m_stepDelaySec{ 0.25f }
@@ -33,6 +34,7 @@ namespace gameoflife
     {
         m_config = t_config;
         setupRenderWindow(m_config.video_mode);
+        m_grid.setup(m_config);
     }
 
     void Coordinator::loop()
@@ -139,7 +141,7 @@ namespace gameoflife
     void Coordinator::draw()
     {
         m_renderWindow.clear(sf::Color::Black);
-        //m_gridDisplay.draw(m_config, m_renderWindow, m_renderStates);
+        m_grid.draw(m_config, m_renderWindow, m_renderStates);
         m_renderWindow.display();
     }
 

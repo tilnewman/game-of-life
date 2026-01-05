@@ -4,6 +4,7 @@
 // coordinator.hpp
 //
 #include "config.hpp"
+#include "grid.hpp"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
@@ -36,6 +37,7 @@ namespace gameoflife
         Config m_config;
         sf::RenderStates m_renderStates;
         sf::RenderWindow m_renderWindow;
+        Grid m_grid;
         bool m_isRunning;
         float m_elapsedTimeSec;
         float m_stepDelaySec;
