@@ -81,24 +81,6 @@ namespace gameoflife
         }
     }
 
-    void Grid::handleEvent(const sf::Event & t_event)
-    {
-        if (const auto * mousePressedPtr = t_event.getIf<sf::Event::MouseButtonReleased>())
-        {
-            const GridPos_t gridPos{ screenPositionToGridPosition(
-                sf::Vector2f{ mousePressedPtr->position }) };
-
-            if (getCellValue(gridPos) == 0)
-            {
-                setCellValue(gridPos, 1);
-            }
-            else
-            {
-                setCellValue(gridPos, 0);
-            }
-        }
-    }
-
     const sf::Vector2f Grid::gridPositionToScreenPosition(const GridPos_t & t_position) const
     {
         return (m_gridRegion.position + (sf::Vector2f{ t_position } * m_cellSize));
