@@ -127,15 +127,17 @@ namespace gameoflife
     bool Grid::isGridPositionValid(const GridPos_t & t_position) const
     {
         return (
-            (t_position.x >= 0) && (t_position.y >= 0) && (t_position.y < m_grid.size()) &&
-            (t_position.x < m_grid.front().size()));
+            (t_position.x >= 0) && (t_position.y >= 0) &&
+            (t_position.y < static_cast<int>(m_grid.size())) &&
+            (t_position.x < static_cast<int>(m_grid.front().size())));
     }
 
     CellType_t Grid::getCellValue(const GridPos_t & t_position) const
     {
         if (isGridPositionValid(t_position))
         {
-            return m_grid.at(t_position.y).at(t_position.x);
+            return m_grid.at(static_cast<std::size_t>(t_position.y))
+                .at(static_cast<std::size_t>(t_position.x));
         }
         else
         {
@@ -150,7 +152,8 @@ namespace gameoflife
             return;
         }
 
-        m_grid.at(t_position.y).at(t_position.x) = t_value;
+        m_grid.at(static_cast<std::size_t>(t_position.y))
+            .at(static_cast<std::size_t>(t_position.x)) = t_value;
     }
 
     /*
