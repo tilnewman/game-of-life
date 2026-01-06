@@ -15,7 +15,7 @@ namespace gameoflife
         sf::VideoMode video_mode{ { 4112u, 2580u }, 32u };
         unsigned framerate_limit{ 0 };
         float screen_edge_pad_ratio{ 0.035f };
-        sf::Vector2u cell_counts{ 60u, 40u };
+        sf::Vector2u cell_counts{ 100u, 60u };
         float grid_line_thickness{ 4.0f };
         sf::Color grid_color_background{ 28, 28, 28 };
         sf::Color grid_color_outline{ 0, 0, 0 };
