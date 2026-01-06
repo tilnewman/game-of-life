@@ -124,17 +124,17 @@ namespace gameoflife
         return { -1, -1 };
     }
 
-    bool Grid::isGridPositionValid(const GridPos_t & t_position) const
+    bool Grid::isGridPositionValid(const Grid_t & t_grid, const GridPos_t & t_position)
     {
         return (
             (t_position.x >= 0) && (t_position.y >= 0) &&
-            (t_position.y < static_cast<int>(m_grid.size())) &&
-            (t_position.x < static_cast<int>(m_grid.front().size())));
+            (t_position.y < static_cast<int>(t_grid.size())) &&
+            (t_position.x < static_cast<int>(t_grid.front().size())));
     }
 
     CellType_t Grid::getCellValue(const GridPos_t & t_position) const
     {
-        if (isGridPositionValid(t_position))
+        if (isGridPositionValid(m_grid, t_position))
         {
             return m_grid.at(static_cast<std::size_t>(t_position.y))
                 .at(static_cast<std::size_t>(t_position.x));
@@ -147,7 +147,7 @@ namespace gameoflife
 
     void Grid::setCellValue(const GridPos_t & t_position, const CellType_t t_value)
     {
-        if (!isGridPositionValid(t_position))
+        if (!isGridPositionValid(m_grid, t_position))
         {
             return;
         }
@@ -199,8 +199,8 @@ namespace gameoflife
             t_config.cell_counts.y, std::vector<unsigned char>(t_config.cell_counts.x, 0));
     }
 
-    std::size_t Grid::getAliveCountAroundGridPosition(
-        const Grid_t & t_grid, const GridPos_t & t_position) const
+    std::size_t
+        Grid::getAliveCountAroundGridPosition(const Grid_t & t_grid, const GridPos_t & t_position)
     {
         std::size_t count{ 0 };
 
@@ -208,7 +208,7 @@ namespace gameoflife
         {
             for (int x{ t_position.x - 1 }; x <= (t_position.x + 1); ++x)
             {
-                if (!isGridPositionValid({ x, y }))
+                if (!isGridPositionValid(t_grid, { x, y }))
                 {
                     continue;
                 }
