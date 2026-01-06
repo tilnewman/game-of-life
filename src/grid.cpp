@@ -19,8 +19,7 @@ namespace gameoflife
 
     void Grid::setup(const Config & t_config)
     {
-        m_grid.resize(
-            t_config.cell_counts.y, std::vector<unsigned char>(t_config.cell_counts.x, 0));
+        reset(t_config);
 
         const sf::Vector2f screenSize{ t_config.video_mode.size };
         const sf::Vector2f padSize{ t_config.screen_edge_pad_ratio * screenSize };
@@ -152,6 +151,78 @@ namespace gameoflife
         }
 
         m_grid.at(t_position.y).at(t_position.x) = t_value;
+    }
+
+    /*
+        Any live cell with fewer than two live neighbours dies, as if by underpopulation.
+        Any live cell with two or three live neighbours lives on to the next generation.
+        Any live cell with more than three live neighbours dies, as if by overpopulation.
+        Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
+    */
+    void Grid::processStep()
+    {
+        Grid_t gridCopy = m_grid;
+
+        for (int y{ 0 }; y < static_cast<int>(m_grid.size()); ++y)
+        {
+            for (int x{ 0 }; x < static_cast<int>(m_grid.front().size()); ++x)
+            {
+                const std::size_t surroundingAliveCells{ getAliveCountAroundGridPosition(
+                    gridCopy, { x, y }) };
+
+                if (getCellValue({ x, y }) == 0)
+                {
+                    if (surroundingAliveCells == 3)
+                    {
+                        setCellValue({ x, y }, 1);
+                    }
+                }
+                else
+                {
+                    if ((surroundingAliveCells < 2) || (surroundingAliveCells > 3))
+                    {
+                        setCellValue({ x, y }, 0);
+                    }
+                }
+            }
+        }
+    }
+
+    void Grid::reset(const Config & t_config)
+    {
+        m_grid.clear();
+
+        m_grid.resize(
+            t_config.cell_counts.y, std::vector<unsigned char>(t_config.cell_counts.x, 0));
+    }
+
+    std::size_t Grid::getAliveCountAroundGridPosition(
+        const Grid_t & t_grid, const GridPos_t & t_position) const
+    {
+        std::size_t count{ 0 };
+
+        for (int y{ t_position.y - 1 }; y <= (t_position.y + 1); ++y)
+        {
+            for (int x{ t_position.x - 1 }; x <= (t_position.x + 1); ++x)
+            {
+                if (!isGridPositionValid({ x, y }))
+                {
+                    continue;
+                }
+
+                if ((t_position.x == x) && (t_position.y == y))
+                {
+                    continue;
+                }
+
+                if (t_grid.at(static_cast<std::size_t>(y)).at(static_cast<std::size_t>(x)) != 0)
+                {
+                    ++count;
+                }
+            }
+        }
+
+        return count;
     }
 
 } // namespace gameoflife

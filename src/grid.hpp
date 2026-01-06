@@ -19,6 +19,7 @@ namespace gameoflife
 
     using CellType_t = unsigned char;
     using GridPos_t  = sf::Vector2i;
+    using Grid_t = std::vector<std::vector<CellType_t>>;
 
     //
 
@@ -35,6 +36,8 @@ namespace gameoflife
             const sf::RenderStates & t_states) const;
 
         void handleEvent(const sf::Event & t_event);
+        void processStep();
+        void reset(const Config & t_config);
 
       private:
         const sf::Vector2f gridPositionToScreenPosition(const GridPos_t & t_position) const;
@@ -43,12 +46,13 @@ namespace gameoflife
         CellType_t getCellValue(const GridPos_t & t_position) const;
         void setCellValue(const GridPos_t & t_position, const CellType_t t_value);
         bool isGridPositionValid(const GridPos_t & t_position) const;
+        std::size_t getAliveCountAroundGridPosition(const Grid_t & t_grid, const GridPos_t & t_position) const;
 
       private:
         sf::Vector2f m_cellSize;
         sf::FloatRect m_gridRegion;
         std::vector<sf::RectangleShape> m_backgroundRectangles;
-        std::vector<std::vector<CellType_t>> m_grid;
+        Grid_t m_grid;
     };
 
 } // namespace gameoflife

@@ -124,6 +124,15 @@ namespace gameoflife
             {
                 m_isPaused = !m_isPaused;
             }
+            else if (keyPtr->scancode == sf::Keyboard::Scancode::Right)
+            {
+                m_grid.processStep();
+            }
+            else if (keyPtr->scancode == sf::Keyboard::Scancode::R)
+            {
+                m_isPaused = true;
+                m_grid.reset(m_config);
+            }
         }
 
         m_grid.handleEvent(t_event);
@@ -131,12 +140,17 @@ namespace gameoflife
 
     void Coordinator::update(const float t_elapsedTimeSec)
     {
+        if (m_isPaused)
+        {
+            return;
+        }
+
         // lazy and greedy take their turns at regular intervals
         m_elapsedTimeSec += t_elapsedTimeSec;
         if (m_elapsedTimeSec > m_stepDelaySec)
         {
             m_elapsedTimeSec = 0.0f;
-            // TODO
+            m_grid.processStep();
         }
     }
 
