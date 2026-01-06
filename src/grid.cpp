@@ -37,7 +37,7 @@ namespace gameoflife
         m_gridRegion.position.y = std::floor(m_gridRegion.position.y);
 
         sf::RectangleShape rectangle;
-        rectangle.setFillColor(t_config.grid_color_background);
+        rectangle.setFillColor(t_config.grid_color_off);
         rectangle.setOutlineColor(t_config.grid_color_outline);
         rectangle.setOutlineThickness(t_config.grid_line_thickness);
         rectangle.setSize(m_cellSize);
