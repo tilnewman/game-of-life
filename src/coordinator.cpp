@@ -228,6 +228,47 @@ namespace gameoflife
                 m_grid.setCellValue(centerPosition + sf::Vector2i{ -1, 4 }, 1);
                 m_grid.setCellValue(centerPosition + sf::Vector2i{ 1, 4 }, 1);
             }
+            else if (keyPtr->scancode == sf::Keyboard::Scancode::Num7)
+            {
+                // Penta-decathlon
+                reset();
+                const sf::Vector2i centerPosition{ m_config.cell_counts / 2u };
+                for (int y{ -1 }; y < 2; ++y)
+                {
+                    for (int x{ -4 }; x < 4; ++x)
+                    {
+                        m_grid.setCellValue(centerPosition + sf::Vector2i{ x, y }, 1);
+                    }
+                }
+
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ -3, 0 }, 0);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 2, 0 }, 0);
+            }
+            else if (keyPtr->scancode == sf::Keyboard::Scancode::Num8)
+            {
+                // ?
+                reset();
+                const sf::Vector2i centerPosition{ m_config.cell_counts / 2u };
+                for (int x{ -19 }; x <= 19; ++x)
+                {
+                    m_grid.setCellValue(centerPosition + sf::Vector2i{ x, 0 }, 1);
+                }
+
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ -11, 0 }, 0);
+
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ -5, 0 }, 0);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ -4, 0 }, 0);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ -3, 0 }, 0);
+
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 1, 0 }, 0);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 2, 0 }, 0);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 3, 0 }, 0);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 4, 0 }, 0);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 5, 0 }, 0);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 6, 0 }, 0);
+
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 14, 0 }, 0);
+            }
         }
         else if (const auto * mousePtr = t_event.getIf<sf::Event::MouseButtonPressed>())
         {
