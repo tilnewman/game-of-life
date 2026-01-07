@@ -137,10 +137,10 @@ namespace gameoflife
 
         if (m_isPaused)
         {
-            if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+            if (const auto * mousePtr = t_event.getIf<sf::Event::MouseButtonPressed>())
             {
                 const GridPos_t gridPos{ m_grid.screenPositionToGridPosition(
-                    sf::Vector2f{ sf::Mouse::getPosition(m_renderWindow) }) };
+                    sf::Vector2f{ mousePtr->position }) };
 
                 if (m_grid.getCellValue(gridPos) == 0)
                 {
