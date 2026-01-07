@@ -21,6 +21,7 @@ namespace gameoflife
         , m_elapsedTimeSec{ 0.0f }
         , m_stepDelaySec{ 0.25f }
         , m_isPaused{ true }
+        , m_stepCounter{ 0 }
     {}
 
     void Coordinator::run(const Config & t_config)
@@ -48,7 +49,7 @@ namespace gameoflife
         }
     }
 
-    void Coordinator::teardown() {}
+    void Coordinator::teardown() { std::cout << "Step Count=" << m_stepCounter << '\n'; }
 
     void Coordinator::setupRenderWindow(sf::VideoMode & t_videoMode)
     {
@@ -105,6 +106,7 @@ namespace gameoflife
         if (t_event.is<sf::Event::Closed>())
         {
             m_isRunning = false;
+            std::cout << "Stopping because window was closed externally.\n";
         }
         else if (const auto * keyPtr = t_event.getIf<sf::Event::KeyPressed>())
         {
@@ -127,17 +129,16 @@ namespace gameoflife
             else if (keyPtr->scancode == sf::Keyboard::Scancode::Right)
             {
                 m_grid.processStep();
+                ++m_stepCounter;
             }
             else if (keyPtr->scancode == sf::Keyboard::Scancode::R)
             {
-                m_isPaused = true;
-                m_grid.reset(m_config);
+                reset();
             }
             else if (keyPtr->scancode == sf::Keyboard::Scancode::Num1)
             {
                 // Glider
-                m_isPaused = true;
-                m_grid.reset(m_config);
+                reset();
                 const sf::Vector2i centerPosition{ m_config.cell_counts / 2u };
                 m_grid.setCellValue(centerPosition + sf::Vector2i{ 3, 0 }, 1);
                 m_grid.setCellValue(centerPosition + sf::Vector2i{ 3, 1 }, 1);
@@ -148,8 +149,7 @@ namespace gameoflife
             else if (keyPtr->scancode == sf::Keyboard::Scancode::Num2)
             {
                 // The R-pentomino
-                m_isPaused = true;
-                m_grid.reset(m_config);
+                reset();
                 const sf::Vector2i centerPosition{ m_config.cell_counts / 2u };
                 m_grid.setCellValue(centerPosition + sf::Vector2i{ 0, 0 }, 1);
                 m_grid.setCellValue(centerPosition + sf::Vector2i{ 0, 1 }, 1);
@@ -160,8 +160,7 @@ namespace gameoflife
             else if (keyPtr->scancode == sf::Keyboard::Scancode::Num3)
             {
                 // Diehard
-                m_isPaused = true;
-                m_grid.reset(m_config);
+                reset();
                 const sf::Vector2i centerPosition{ m_config.cell_counts / 2u };
                 m_grid.setCellValue(centerPosition + sf::Vector2i{ -5, 0 }, 1);
                 m_grid.setCellValue(centerPosition + sf::Vector2i{ -4, 0 }, 1);
@@ -175,8 +174,7 @@ namespace gameoflife
             else if (keyPtr->scancode == sf::Keyboard::Scancode::Num4)
             {
                 // Acorn
-                m_isPaused = true;
-                m_grid.reset(m_config);
+                reset();
                 const sf::Vector2i centerPosition{ m_config.cell_counts / 2u };
                 m_grid.setCellValue(centerPosition + sf::Vector2i{ -3, 0 }, 1);
                 m_grid.setCellValue(centerPosition + sf::Vector2i{ -2, 0 }, 1);
@@ -190,8 +188,7 @@ namespace gameoflife
             else if (keyPtr->scancode == sf::Keyboard::Scancode::Num5)
             {
                 // Infinite Block 1
-                m_isPaused = true;
-                m_grid.reset(m_config);
+                reset();
                 const sf::Vector2i centerPosition{ m_config.cell_counts / 2u };
                 m_grid.setCellValue(centerPosition + sf::Vector2i{ -4, 0 }, 1);
 
@@ -211,8 +208,7 @@ namespace gameoflife
             else if (keyPtr->scancode == sf::Keyboard::Scancode::Num6)
             {
                 // Infinite Block 2
-                m_isPaused = true;
-                m_grid.reset(m_config);
+                reset();
                 const sf::Vector2i centerPosition{ m_config.cell_counts / 2u };
                 m_grid.setCellValue(centerPosition + sf::Vector2i{ -3, 0 }, 1);
                 m_grid.setCellValue(centerPosition + sf::Vector2i{ -2, 0 }, 1);
@@ -265,6 +261,7 @@ namespace gameoflife
         {
             m_elapsedTimeSec = 0.0f;
             m_grid.processStep();
+            ++m_stepCounter;
         }
     }
 
@@ -273,6 +270,13 @@ namespace gameoflife
         m_renderWindow.clear(sf::Color::Black);
         m_grid.draw(m_config, m_renderWindow, m_renderStates);
         m_renderWindow.display();
+    }
+
+    void Coordinator::reset()
+    {
+        m_isPaused = true;
+        m_grid.reset(m_config);
+        m_stepCounter = 0;
     }
 
 } // namespace gameoflife

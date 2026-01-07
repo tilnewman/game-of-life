@@ -32,6 +32,7 @@ namespace gameoflife
         void handleEvent(const sf::Event & t_event);
         void update(const float t_elapsedTimeSec);
         void draw();
+        void reset();
 
       private:
         Config m_config;
@@ -42,6 +43,7 @@ namespace gameoflife
         float m_elapsedTimeSec;
         float m_stepDelaySec;
         bool m_isPaused;
+        std::size_t m_stepCounter;
     };
 
 } // namespace gameoflife
