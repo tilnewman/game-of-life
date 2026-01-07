@@ -106,17 +106,17 @@ namespace gameoflife
         return { -1, -1 };
     }
 
-    bool Grid::isGridPositionValid(const Grid_t & t_grid, const GridPos_t & t_position)
+    bool Grid::isGridPositionValid(const GridPos_t & t_position) const
     {
         return (
             (t_position.x >= 0) && (t_position.y >= 0) &&
-            (t_position.y < static_cast<int>(t_grid.size())) &&
-            (t_position.x < static_cast<int>(t_grid.front().size())));
+            (t_position.y < static_cast<int>(m_grid.size())) &&
+            (t_position.x < static_cast<int>(m_grid.front().size())));
     }
 
     CellType_t Grid::getCellValue(const GridPos_t & t_position) const
     {
-        if (isGridPositionValid(m_grid, t_position))
+        if (isGridPositionValid(t_position))
         {
             return m_grid.at(static_cast<std::size_t>(t_position.y))
                 .at(static_cast<std::size_t>(t_position.x));
@@ -129,7 +129,7 @@ namespace gameoflife
 
     void Grid::setCellValue(const GridPos_t & t_position, const CellType_t t_value)
     {
-        if (!isGridPositionValid(m_grid, t_position))
+        if (!isGridPositionValid(t_position))
         {
             return;
         }
@@ -146,29 +146,42 @@ namespace gameoflife
     */
     void Grid::processStep()
     {
-        Grid_t gridCopy = m_grid;
+        std::vector<GridPos_t> positionsToFlip;
+        positionsToFlip.reserve(m_grid.size() * m_grid.front().size());
 
         for (int y{ 0 }; y < static_cast<int>(m_grid.size()); ++y)
         {
             for (int x{ 0 }; x < static_cast<int>(m_grid.front().size()); ++x)
             {
                 const std::size_t surroundingAliveCells{ getAliveCountAroundGridPosition(
-                    gridCopy, { x, y }) };
+                    { x, y }) };
 
                 if (getCellValue({ x, y }) == 0)
                 {
                     if (surroundingAliveCells == 3)
                     {
-                        setCellValue({ x, y }, 1);
+                        positionsToFlip.emplace_back(x, y);
                     }
                 }
                 else
                 {
                     if ((surroundingAliveCells < 2) || (surroundingAliveCells > 3))
                     {
-                        setCellValue({ x, y }, 0);
+                        positionsToFlip.emplace_back(x, y);
                     }
                 }
+            }
+        }
+
+        for (const GridPos_t & position : positionsToFlip)
+        {
+            if (getCellValue(position) == 0)
+            {
+                setCellValue(position, 1);
+            }
+            else
+            {
+                setCellValue(position, 0);
             }
         }
     }
@@ -181,8 +194,7 @@ namespace gameoflife
             t_config.cell_counts.y, std::vector<unsigned char>(t_config.cell_counts.x, 0));
     }
 
-    std::size_t
-        Grid::getAliveCountAroundGridPosition(const Grid_t & t_grid, const GridPos_t & t_position)
+    std::size_t Grid::getAliveCountAroundGridPosition(const GridPos_t & t_position) const
     {
         std::size_t count{ 0 };
 
@@ -190,7 +202,7 @@ namespace gameoflife
         {
             for (int x{ t_position.x - 1 }; x <= (t_position.x + 1); ++x)
             {
-                if (!isGridPositionValid(t_grid, { x, y }))
+                if (!isGridPositionValid({ x, y }))
                 {
                     continue;
                 }
@@ -200,7 +212,7 @@ namespace gameoflife
                     continue;
                 }
 
-                if (t_grid.at(static_cast<std::size_t>(y)).at(static_cast<std::size_t>(x)) != 0)
+                if (m_grid.at(static_cast<std::size_t>(y)).at(static_cast<std::size_t>(x)) != 0)
                 {
                     ++count;
                 }

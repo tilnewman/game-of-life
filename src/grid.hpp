@@ -43,10 +43,9 @@ namespace gameoflife
         const sf::Vector2f gridPositionToScreenPosition(const GridPos_t & t_position) const;
         const GridPos_t screenPositionToGridPosition(const sf::Vector2f & t_position) const;
 
-        static bool isGridPositionValid(const Grid_t & t_grid, const GridPos_t & t_position);
+        bool isGridPositionValid(const GridPos_t & t_position) const;
 
-        static std::size_t
-            getAliveCountAroundGridPosition(const Grid_t & t_grid, const GridPos_t & t_position);
+        std::size_t getAliveCountAroundGridPosition(const GridPos_t & t_position) const;
 
       private:
         sf::Vector2f m_cellSize;
