@@ -133,11 +133,109 @@ namespace gameoflife
                 m_isPaused = true;
                 m_grid.reset(m_config);
             }
-        }
+            else if (keyPtr->scancode == sf::Keyboard::Scancode::Num1)
+            {
+                // Glider
+                m_isPaused = true;
+                m_grid.reset(m_config);
+                const sf::Vector2i centerPosition{ m_config.cell_counts / 2u };
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 3, 0 }, 1);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 3, 1 }, 1);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 3, 2 }, 1);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 2, 2 }, 1);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 1, 1 }, 1);
+            }
+            else if (keyPtr->scancode == sf::Keyboard::Scancode::Num2)
+            {
+                // The R-pentomino
+                m_isPaused = true;
+                m_grid.reset(m_config);
+                const sf::Vector2i centerPosition{ m_config.cell_counts / 2u };
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 0, 0 }, 1);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 0, 1 }, 1);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 0, 2 }, 1);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 1, 0 }, 1);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ -1, 1 }, 1);
+            }
+            else if (keyPtr->scancode == sf::Keyboard::Scancode::Num3)
+            {
+                // Diehard
+                m_isPaused = true;
+                m_grid.reset(m_config);
+                const sf::Vector2i centerPosition{ m_config.cell_counts / 2u };
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ -5, 0 }, 1);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ -4, 0 }, 1);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ -4, 1 }, 1);
 
-        if (m_isPaused)
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 0, 1 }, 1);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 1, 1 }, 1);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 2, 1 }, 1);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 1, -1 }, 1);
+            }
+            else if (keyPtr->scancode == sf::Keyboard::Scancode::Num4)
+            {
+                // Acorn
+                m_isPaused = true;
+                m_grid.reset(m_config);
+                const sf::Vector2i centerPosition{ m_config.cell_counts / 2u };
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ -3, 0 }, 1);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ -2, 0 }, 1);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ -2, -2 }, 1);
+
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 0, -1 }, 1);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 1, 0 }, 1);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 2, 0 }, 1);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 3, 0 }, 1);
+            }
+            else if (keyPtr->scancode == sf::Keyboard::Scancode::Num5)
+            {
+                // Infinite Block 1
+                m_isPaused = true;
+                m_grid.reset(m_config);
+                const sf::Vector2i centerPosition{ m_config.cell_counts / 2u };
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ -4, 0 }, 1);
+
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ -2, 0 }, 1);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ -2, -1 }, 1);
+
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 0, -2 }, 1);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 0, -3 }, 1);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 0, -4 }, 1);
+
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 2, -3 }, 1);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 2, -4 }, 1);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 2, -5 }, 1);
+
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 3, -4 }, 1);
+            }
+            else if (keyPtr->scancode == sf::Keyboard::Scancode::Num6)
+            {
+                // Infinite Block 2
+                m_isPaused = true;
+                m_grid.reset(m_config);
+                const sf::Vector2i centerPosition{ m_config.cell_counts / 2u };
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ -3, 0 }, 1);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ -2, 0 }, 1);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ -1, 0 }, 1);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 1, 0 }, 1);
+
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ -3, 1 }, 1);
+
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 0, 2 }, 1);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 1, 2 }, 1);
+
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ -2, 3 }, 1);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ -1, 3 }, 1);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 1, 3 }, 1);
+
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ -3, 4 }, 1);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ -1, 4 }, 1);
+                m_grid.setCellValue(centerPosition + sf::Vector2i{ 1, 4 }, 1);
+            }
+        }
+        else if (const auto * mousePtr = t_event.getIf<sf::Event::MouseButtonPressed>())
         {
-            if (const auto * mousePtr = t_event.getIf<sf::Event::MouseButtonPressed>())
+            if (m_isPaused)
             {
                 const GridPos_t gridPos{ m_grid.screenPositionToGridPosition(
                     sf::Vector2f{ mousePtr->position }) };
