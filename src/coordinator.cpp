@@ -300,7 +300,6 @@ namespace gameoflife
             return;
         }
 
-        // lazy and greedy take their turns at regular intervals
         m_elapsedTimeSec += t_elapsedTimeSec;
         if (m_elapsedTimeSec > m_stepDelaySec)
         {
