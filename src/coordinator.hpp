@@ -3,6 +3,7 @@
 //
 // coordinator.hpp
 //
+#include "bloom-shader.hpp"
 #include "config.hpp"
 #include "grid.hpp"
 
@@ -38,6 +39,7 @@ namespace gameoflife
         Config m_config;
         sf::RenderStates m_renderStates;
         sf::RenderWindow m_renderWindow;
+        std::unique_ptr<util::BloomEffectHelper> m_bloomWindowPtr;
         Grid m_grid;
         bool m_isRunning;
         float m_elapsedTimeSec;

@@ -16,6 +16,7 @@ namespace gameoflife
         : m_config{}
         , m_renderStates{}
         , m_renderWindow{}
+        , m_bloomWindowPtr{}
         , m_grid{}
         , m_isRunning{ true }
         , m_elapsedTimeSec{ 0.0f }
@@ -35,13 +36,16 @@ namespace gameoflife
     {
         m_config = t_config;
         setupRenderWindow(m_config.video_mode);
+        m_bloomWindowPtr = std::make_unique<util::BloomEffectHelper>(m_renderWindow);
+        m_bloomWindowPtr->isEnabled(true);
+        m_bloomWindowPtr->blurMultipassCount(3);
         m_grid.setup(m_config);
     }
 
     void Coordinator::loop()
     {
         sf::Clock frameClock;
-        while (m_renderWindow.isOpen() && m_isRunning)
+        while (m_bloomWindowPtr->isOpen() && m_isRunning)
         {
             handleEvents();
             update(frameClock.restart().asSeconds());
@@ -308,9 +312,9 @@ namespace gameoflife
 
     void Coordinator::draw()
     {
-        m_renderWindow.clear(sf::Color::Black);
-        m_grid.draw(m_config, m_renderWindow, m_renderStates);
-        m_renderWindow.display();
+        m_bloomWindowPtr->clear(sf::Color::Black);
+        m_grid.draw(m_config, m_bloomWindowPtr->renderTarget(), m_renderStates);
+        m_bloomWindowPtr->display();
     }
 
     void Coordinator::reset()
