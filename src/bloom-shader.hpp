@@ -22,14 +22,19 @@ namespace util
             , m_verts(sf::PrimitiveType::TriangleStrip, 4)
             , m_renderStates()
         {
-            m_shader.loadFromMemory(m_fullPassVertexShaderCode, fragmentShader);
+            if (!m_shader.loadFromMemory(m_fullPassVertexShaderCode, fragmentShader))
+            {
+                throw std::runtime_error(
+                    "FullPassFragmentShader could not be constructed because "
+                    "sf::Shader::loadFromMemory(fragmentShader) returned failed.");
+            }
 
             // sf::VertexArray and sf::Vertex zero initializes so only need to set non-zeros here
             m_verts[0].texCoords.y = 1.0f;
-            m_verts[1].texCoords = { 1.0f, 1.0f };
+            m_verts[1].texCoords   = { 1.0f, 1.0f };
             m_verts[3].texCoords.x = 1.0f;
 
-            m_renderStates.shader = &m_shader;
+            m_renderStates.shader    = &m_shader;
             m_renderStates.blendMode = sf::BlendNone;
         }
 
@@ -46,7 +51,7 @@ namespace util
             // these are the only values that can change
             m_verts[1].position.x = size.x;
             m_verts[2].position.y = size.y;
-            m_verts[3].position = size;
+            m_verts[3].position   = size;
 
             // no need to clear before draw because this is "full pass" and sf::BlendNone
             target.draw(m_verts, m_renderStates);
@@ -263,6 +268,7 @@ void main()\
 
             m_addShader.apply(
                 m_halfSizeTextures[0], m_quarterSizeTextures[0], m_halfSizeTextures[1]);
+
             m_halfSizeTextures[1].display();
 
             m_addShader.apply(input, m_halfSizeTextures[1], output);
@@ -293,7 +299,13 @@ void main()\
                 return;
             }
 
-            renderTexture.resize(size);
+            if (!renderTexture.resize(size))
+            {
+                throw std::runtime_error(
+                    "BloomEffect::createRenderTexture() failed because sf::RenderTexture::create() "
+                    "call failed.");
+            }
+
             renderTexture.setSmooth(true);
         }
 
@@ -321,17 +333,18 @@ void main()\
         {
             if (!m_bloomEffect.isSupported())
             {
-                throw std::runtime_error("BloomEffectHelper's constructor just found out that sfml "
-                                         "shaders are not supported on your shitty video card.");
+                throw std::runtime_error(
+                    "BloomEffectHelper's constructor just found out that sfml "
+                    "shaders are not supported on your shitty video card.");
             }
         }
 
         // prevent all copy and assignment
         BloomEffectHelper(const BloomEffectHelper &) = delete;
-        BloomEffectHelper(BloomEffectHelper &&) = delete;
+        BloomEffectHelper(BloomEffectHelper &&)      = delete;
         //
         BloomEffectHelper & operator=(const BloomEffectHelper &) = delete;
-        BloomEffectHelper & operator=(BloomEffectHelper &&) = delete;
+        BloomEffectHelper & operator=(BloomEffectHelper &&)      = delete;
 
         bool isOpen() const { return m_window.isOpen(); }
 
