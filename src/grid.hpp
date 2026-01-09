@@ -9,6 +9,7 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/Graphics/Vertex.hpp>
 
 #include <optional>
 #include <vector>
@@ -50,8 +51,9 @@ namespace gameoflife
       private:
         sf::Vector2f m_cellSize;
         sf::FloatRect m_gridRegion;
-        std::vector<sf::RectangleShape> m_backgroundRectangles;
         Grid_t m_grid;
+        std::vector<sf::Vertex> m_lineVerts;
+        sf::RectangleShape m_backgroundRectangle;
     };
 
 } // namespace gameoflife

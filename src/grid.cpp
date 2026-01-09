@@ -13,14 +13,17 @@ namespace gameoflife
     Grid::Grid()
         : m_cellSize{}
         , m_gridRegion{}
-        , m_backgroundRectangles{}
         , m_grid{}
+        , m_lineVerts{}
+        , m_backgroundRectangle{}
     {}
 
     void Grid::setup(const Config & t_config)
     {
+        // setup/size the grid vectors
         reset(t_config);
 
+        // establish cell size
         const sf::Vector2f screenSize{ t_config.video_mode.size };
         const sf::Vector2f padSize{ t_config.screen_edge_pad_ratio * screenSize };
         const sf::FloatRect gridRegionRaw{ padSize, { screenSize - (padSize * 2.0f) } };
@@ -31,24 +34,39 @@ namespace gameoflife
         m_cellSize.x = cellDimm;
         m_cellSize.y = cellDimm;
 
+        // establish where on screen the grid is (center it)
         m_gridRegion.size       = { m_cellSize * sf::Vector2f{ t_config.cell_counts } };
         m_gridRegion.position   = { (screenSize * 0.5f) - (m_gridRegion.size * 0.5f) };
         m_gridRegion.position.x = std::floor(m_gridRegion.position.x);
         m_gridRegion.position.y = std::floor(m_gridRegion.position.y);
 
-        sf::RectangleShape rectangle;
-        rectangle.setFillColor(t_config.grid_color_off);
-        rectangle.setOutlineColor(t_config.grid_color_outline);
-        rectangle.setOutlineThickness(t_config.grid_line_thickness);
-        rectangle.setSize(m_cellSize);
+        // setup the grid background color
+        m_backgroundRectangle.setFillColor(t_config.grid_color_off);
+        m_backgroundRectangle.setSize(m_gridRegion.size);
+        m_backgroundRectangle.setPosition(m_gridRegion.position);
 
-        for (int y{ 0 }; y < static_cast<int>(t_config.cell_counts.y); ++y)
+        // setup the grid cell lines
+        for (int x{ 0 }; x <= static_cast<int>(t_config.cell_counts.x); ++x)
         {
-            for (int x{ 0 }; x < static_cast<int>(t_config.cell_counts.x); ++x)
-            {
-                rectangle.setPosition(gridPositionToScreenPosition({ x, y }));
-                m_backgroundRectangles.push_back(rectangle);
-            }
+            const float horizPos{ m_gridRegion.position.x +
+                                  (static_cast<float>(x) * m_cellSize.x) };
+
+            m_lineVerts.emplace_back(
+                sf::Vector2f{ horizPos, m_gridRegion.position.y }, t_config.grid_color_outline);
+
+            m_lineVerts.emplace_back(
+                sf::Vector2f{ horizPos, util::bottom(m_gridRegion) }, t_config.grid_color_outline);
+        }
+
+        for (int y{ 0 }; y <= static_cast<int>(t_config.cell_counts.y); ++y)
+        {
+            const float vertPos{ m_gridRegion.position.y + (static_cast<float>(y) * m_cellSize.y) };
+
+            m_lineVerts.emplace_back(
+                sf::Vector2f{ m_gridRegion.position.x, vertPos }, t_config.grid_color_outline);
+
+            m_lineVerts.emplace_back(
+                sf::Vector2f{ util::right(m_gridRegion), vertPos }, t_config.grid_color_outline);
         }
     }
 
@@ -57,10 +75,8 @@ namespace gameoflife
         sf::RenderTarget & t_target,
         const sf::RenderStates & t_states) const
     {
-        for (const sf::RectangleShape & rectangle : m_backgroundRectangles)
-        {
-            t_target.draw(rectangle, t_states);
-        }
+        t_target.draw(m_backgroundRectangle, t_states);
+        t_target.draw(&m_lineVerts[0], m_lineVerts.size(), sf::PrimitiveType::Lines);
 
         sf::RectangleShape rectangle;
         rectangle.setFillColor(t_config.grid_color_on);
